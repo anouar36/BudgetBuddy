@@ -7,7 +7,16 @@ use App\Models\Tage;
 
 class TageController extends Controller
 {
-    public function create(Request $request)
+
+    public function index()
+    {
+
+        $data = Tage::all();
+        return response()->json([$data], 201);
+    }
+
+
+    public function store(Request $request)
     {
         $request->validate([
             'name' => 'required|string',
@@ -20,13 +29,6 @@ class TageController extends Controller
         return response()->json(['message' => 'The Tage is added successfully!'], 201);
     }
 
-
-    public function store()
-    {
-
-        $data = Tage::all();
-        return response()->json([$data], 201);
-    }
 
     public function show($id)
     {
@@ -55,12 +57,13 @@ class TageController extends Controller
     {
 
          $Tage = Tage::find($id)->delete();
-
          if(!$Tage){
-
             return response()->json(['message' => 'Tage id not delete !'], 200);
          }
          return response()->json(['message' => 'Tage delete successfully!'], 200);
 
     }
+
+
+    
 }

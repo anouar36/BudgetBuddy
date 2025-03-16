@@ -25,7 +25,7 @@ class AuthController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
-        return response()->json(['message' => 'تم تسجيل المستخدم بنجاح!'], 201);
+        return response()->json(['message' => 'User registered successfully!'], 201);
 
     }
 
@@ -41,7 +41,7 @@ class AuthController extends Controller
 
         if (!$user || !Hash::check($request->password, $user->password)) {
             throw ValidationException::withMessages([
-                'email' => ['بيانات الاعتماد غير صحيحة.'],
+                'email' => ['The credentials are incorrect.'],
             ]);
         }
         $token = $user->createToken('auth_token')->plainTextToken;

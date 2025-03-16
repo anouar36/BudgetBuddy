@@ -10,30 +10,35 @@ use App\Models\Depense;
 class DepenseController extends Controller
 {
 
-    public function create(Request $request)
-    {
-        $request->validate([
-            'name' => 'required|string',
-            'number' => 'required|integer', 
-            'user_id' => 'required|integer',
-        ]);
-
-        $depens = Depense::create([
-            'name' => $request->name,
-            'number' => $request->number,
-            'user_id' => $request->user_id,
-        ]);
-
-        return response()->json(['message' => 'The Depense is added successfully!'], 201);
-    }
-
-
-    public function store()
+    public function index()
     {
 
         $data = Depense::whereNotNull('user_id')->get();
         return response()->json([$data], 201);
     }
+
+
+    public function store(Request $request)
+    {
+        if (!$request->user()) {
+            return response()->json(['message' => 'Unauthorized'], 401);
+        }
+        $request->validate([
+            'name' => 'required|string',
+            'number' => 'required|integer', 
+        ]);
+
+        $depens = Depense::create([
+            'name' => $request->name,
+            'number' => $request->number,
+            'user_id' => $request->user()->id,
+        ]);
+
+        return response()->json(['message' => 'The Depense is add successfully!'], 201);
+    }
+
+
+   
 
     public function show($id)
     {
@@ -72,4 +77,25 @@ class DepenseController extends Controller
          return response()->json(['message' => 'Depense delete successfully!'], 200);
 
     }
+
+    public function attachTags($id, Request $request)
+    {
+        $request->validate([
+            'tages' => 'required|array',
+        ]);
+
+        $depense = Depense::find($id);
+
+        if (!$depense) {
+            return response()->json(['error' => 'Depense not found!'], 404);
+        }
+
+        $depense->tages()->sync($request->tages);
+
+        return response()->json(['message' => 'Tags added successfully!', 'data' => $depense->tages], 200);
+    }
+
+
+   
+
 }
