@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\Depense;
+use App\Models\DepensePartage;
 use App\Models\Tage;
 
 class DepenseFactory extends Factory
@@ -34,8 +35,8 @@ class DepenseFactory extends Factory
                 $tags = Tage::inRandomOrder()->limit(rand(1, 10))->pluck('id');
         
                 \DB::table('depense_tage')->insert([
-                    'depense_id' => $depense_id,
-                    'tage_id' => $tags->random(),
+                    'depense_id' => DepensePartage::inRandomOrder()->first()->id ?? DepensePartage::factory(),
+                    'tage_id' => $tags->random()->numberBetween(1, 10),
                     'created_at' => now(),
                     'updated_at' => now(),
                 ]);
