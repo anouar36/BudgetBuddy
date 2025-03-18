@@ -19,7 +19,6 @@ class GroupController extends Controller
         $request->validate([
             'name' => 'required|string',
             'devise' => 'required|string',
-
         ]);
 
 

@@ -64,7 +64,7 @@ Route::middleware('auth:sanctum')->group(function () {
     
 
     // Ajout des Dépenses Partagées
-    Route::get   ('/groups/{id}/expenses ', [DepencePartageController::class, 'create']);
+    Route::get   ('/groups/{id}/expenses ', [DepencePartageController::class, 'store']);
     Route::delete('groups/{id}/expenses/{expenseId} ', [DepencePartageController::class, 'destroy']);
 
 

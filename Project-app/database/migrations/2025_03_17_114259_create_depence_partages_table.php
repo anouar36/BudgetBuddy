@@ -17,6 +17,8 @@ class CreateDepencePartagesTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('montant');
+            $table->string('Qui_a_paye');
+            $table->string('diviser');
             $table->unsignedBigInteger('group_id');
             $table->foreign('group_id')->references('id')->on('groups')->onDelete('cascade');
             $table->string('description');
