@@ -18,7 +18,8 @@ class GroupFactory extends Factory
         return [
             'name' => $this->faker->word, 
             'devise' => $this->faker->currencyCode, 
-            'user_id' => User::factory()->numberBetween(1, 10), 
+            'user_id' => $this->faker->numberBetween(1, 10),
+
         ];
     }
 }

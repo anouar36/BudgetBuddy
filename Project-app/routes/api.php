@@ -55,10 +55,13 @@ Route::middleware('auth:sanctum')->group(function () {
 
 
     // Création et Gestion des Groupes de Dépenses
-    Route::post  ('/groups', [GroupController::class, 'create']); 
-    Route::get   ('/groups/{id}', [GroupController::class, 'show']);
-    Route::delete('/groups/{id}', [GroupController::class, 'destroy']);
-
+    Route::get   ('/groups', [GroupController::class, 'index']); 
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::post  ('/groups', [GroupController::class, 'store']); 
+        Route::get   ('/groups/{id}', [GroupController::class, 'show']);
+        Route::delete('/groups/{id}', [GroupController::class, 'destroy']);     
+    });
+    
 
     // Ajout des Dépenses Partagées
     Route::get   ('/groups/{id}/expenses ', [DepencePartageController::class, 'create']);

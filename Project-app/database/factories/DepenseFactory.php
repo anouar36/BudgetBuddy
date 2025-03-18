@@ -4,7 +4,7 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\Depense;
-use App\Models\DepensePartage;
+use App\Models\DepencePartage;
 use App\Models\Tage;
 
 class DepenseFactory extends Factory
@@ -18,8 +18,9 @@ class DepenseFactory extends Factory
     {
         return [
             'name' => $this->faker->name(),
-            'number' => $this->faker->numberBetween(20, 900),
-            'user_id'=> $this->faker->numberBetween(1, 10),
+            'number' => $this->faker->randomNumber(5, true), 
+            'user_id' => $this->faker->numberBetween(1, 10),
+
         ];
         
     }
@@ -35,8 +36,8 @@ class DepenseFactory extends Factory
                 $tags = Tage::inRandomOrder()->limit(rand(1, 10))->pluck('id');
         
                 \DB::table('depense_tage')->insert([
-                    'depense_id' => DepensePartage::inRandomOrder()->first()->id ?? DepensePartage::factory(),
-                    'tage_id' => $tags->random()->numberBetween(1, 10),
+                    'depense_id' => DepencePartage::inRandomOrder()->value('id') ?? DepencePartage::factory()->create()->id,
+                    'tage_id' => $tags->random(),
                     'created_at' => now(),
                     'updated_at' => now(),
                 ]);

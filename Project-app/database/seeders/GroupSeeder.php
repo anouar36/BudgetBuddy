@@ -3,8 +3,9 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use App\Models\Group;
 
-class DepenseSeeder extends Seeder
+class GroupSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -13,7 +14,6 @@ class DepenseSeeder extends Seeder
      */
     public function run()
     {
-        \App\Models\depense::factory(10)->create();
-
+        Group::factory()->count(10)->create(); 
     }
 }

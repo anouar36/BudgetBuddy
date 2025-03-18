@@ -9,7 +9,6 @@ class GroupController extends Controller
 {
     public function index()
     {
-
         $data = Group::all();
         return response()->json([$data], 201);
     }
@@ -23,10 +22,11 @@ class GroupController extends Controller
 
         ]);
 
+
         $depens = Group::create([
             'name' => $request->name,
             'devise' => $request->devise,
-            'user_id' => auth()->user()->id
+            'user_id' => $request->user()->id,
         ]);
 
         return response()->json(['message' => 'The Group is added successfully!'], 201);
