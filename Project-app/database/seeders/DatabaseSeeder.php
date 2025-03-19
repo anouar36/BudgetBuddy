@@ -17,6 +17,5 @@ class DatabaseSeeder extends Seeder
         \App\Models\depense::factory(10)->create();
         \App\Models\Tage::factory(10)->create();
         \App\Models\Group::factory()->count(10)->create(); 
-        \App\Models\depencePartage::factory(10)->create();
     }
 }

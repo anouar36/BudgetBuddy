@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\DepencePartageController;
 use App\Http\Controllers\GroupController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -9,6 +8,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DepenseController;
 use App\Http\Controllers\TageController;
+use App\Http\Controllers\ExpensesGroupController;
 
 
 
@@ -58,14 +58,29 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get   ('/groups', [GroupController::class, 'index']); 
     Route::middleware('auth:sanctum')->group(function () {
         Route::post  ('/groups', [GroupController::class, 'store']); 
+        Route::post  ('/groups/{id}/users', [GroupController::class, 'addUsersToGroup']);
         Route::get   ('/groups/{id}', [GroupController::class, 'show']);
-        Route::delete('/groups/{id}', [GroupController::class, 'destroy']);     
+        Route::delete('/groups/{id}', [GroupController::class, 'destroy']);
+        // Calcul Automatique des Soldes
+        Route::get('/groups/{id}/balances  ', [GroupController::class, 'calcul']);
+
+
+     
     });
     
 
     // Ajout des Dépenses Partagées
-    Route::get   ('/groups/{id}/expenses ', [DepencePartageController::class, 'store']);
-    Route::delete('groups/{id}/expenses/{expenseId} ', [DepencePartageController::class, 'destroy']);
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::delete('/groups/{id}/expenses/{expenseId} ', [ExpensesGroupController::class, 'destroy']);
+        Route::post   ('/groups/{id}/expenses ', [ExpensesGroupController::class, 'ExpensesGroup']);
+    
+    });
+
+
+   
+  
+    
+
 
 
 

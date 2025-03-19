@@ -22,4 +22,26 @@ class Depense extends Model
         return $this->belongsToMany(tage::class);
         
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function groups()
+    {
+        return $this->belongsToMany(Group::class);
+    }
+
+    public function expensesGroups()
+    {
+        return $this->hasMany(ExpensesGroup::class, 'depenses_id');
+    }
+
+    public function tags()
+    {
+        return $this->belongsToMany(Tage::class);
+    }
+
+
 }

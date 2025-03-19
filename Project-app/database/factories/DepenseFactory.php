@@ -36,7 +36,7 @@ class DepenseFactory extends Factory
                 $tags = Tage::inRandomOrder()->limit(rand(1, 10))->pluck('id');
         
                 \DB::table('depense_tage')->insert([
-                    'depense_id' => DepencePartage::inRandomOrder()->value('id') ?? DepencePartage::factory()->create()->id,
+                    'depense_id' => $depense_id,
                     'tage_id' => $tags->random(),
                     'created_at' => now(),
                     'updated_at' => now(),
