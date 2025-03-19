@@ -88,8 +88,81 @@ class GroupController extends Controller
             $balances[$user->name] = $depensesAmount - $share;
         }
 
-        return response()->json(['balances' => $balances]);
+        return $balances;
     }
+
+
+
+    public function justice($id)
+    {
+      $balances = $this->calcul($id);
+        $debts = [];    
+        $credits = [];  
+        foreach ($balances as $name => $balance) {
+            if ($balance > 0) {
+                $credits[$name] = $balance;
+            } elseif ($balance < 0) {
+                $debts[$name] = $balance;  
+            }
+        }
+        $transactions = [];
+        foreach ($debts as $debtor => $debt) {
+            foreach ($credits as $creditor => $credit) {
+                if ($debt < 0 && $credit > 0) {
+                    $amount = min(-$debt, $credit);
+                    $transactions[] = [
+                        'mine' => $creditor,
+                        'ila' => $debtor,
+                        'amount' => $amount,
+                    ];
+                    $debts[$debtor] += $amount;
+                    $credits[$creditor] -= $amount;
+                }
+            }
+        }
+        return response()->json($transactions);
+    }
+
+
+    public function settleUp($id, Request $request)
+    {
+        $request->validate([
+            'mine' => 'required|string',
+            'ila' => 'required|string',
+            'amount' => 'required|numeric',
+        ]);
+
+        $group = Group::findOrFail($id);
+        $mine = $group->users->where('name', $request->mine)->first();
+        $ila = $group->users->where('name', $request->ila)->first();
+
+        $depense = $group->expensesGroups()->create([
+            'depenses_id' => 3,
+            'user_id' => $mine->id,
+            'amount' => $request->amount,
+            'paid_by' => $mine->name,
+            'split_method' => 'equal',
+        ]);
+
+        $depense = $group->expensesGroups()->create([
+            'depenses_id' => 3,
+            'user_id' => $ila->id,
+            'amount' => -$request->amount,
+            'paid_by' => $mine->name,
+            'split_method' => 'equal',
+        ]);
+
+        return response()->json(['message' => 'The settlement has been added successfully!'], 201);
+    }
+
+    public function history($id)
+    {
+        $group = Group::findOrFail($id);
+        $depenses = $group->expensesGroups;
+        return response()->json($depenses);
+    }
+
+    
 
 
 

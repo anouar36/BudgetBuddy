@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\GroupController;
+use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -62,7 +63,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get   ('/groups/{id}', [GroupController::class, 'show']);
         Route::delete('/groups/{id}', [GroupController::class, 'destroy']);
         // Calcul Automatique des Soldes
-        Route::get('/groups/{id}/balances  ', [GroupController::class, 'calcul']);
+        Route::get('/groups/{id}/balances  ', [GroupController::class, 'justice']);
 
 
      
@@ -72,9 +73,21 @@ Route::middleware('auth:sanctum')->group(function () {
     // Ajout des Dépenses Partagées
     Route::middleware('auth:sanctum')->group(function () {
         Route::delete('/groups/{id}/expenses/{expenseId} ', [ExpensesGroupController::class, 'destroy']);
-        Route::post   ('/groups/{id}/expenses ', [ExpensesGroupController::class, 'ExpensesGroup']);
+        Route::post  ('/groups/{id}/expenses ', [ExpensesGroupController::class, 'ExpensesGroup']);
     
     });
+
+
+    //  Règlement des Comptes
+
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::post('/groups/{id}/settle', [GroupController::class, 'settleUp']);
+        Route::get('/groups/{id}/history', [GroupController::class, 'history']);
+    });
+
+
+ 
+
 
 
    

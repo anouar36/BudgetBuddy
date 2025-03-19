@@ -37,7 +37,6 @@ class ExpensesGroupController extends Controller
 
     return response()->json(['message' => 'The ExpensesGroup has been added successfully!'], 201);
 }
-
     public function destroy($id, $expenseId)
     {
         $ExpensesGroup = ExpensesGroup:: where('group_id', $id)
