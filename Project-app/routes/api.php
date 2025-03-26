@@ -85,6 +85,18 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/groups/{id}/history', [GroupController::class, 'history']);
     });
 
+// Gestion Intelligente du Budget et Alertes Automatiques Définition de Budgets Mensuels
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/budgets', [BudgetController::class, 'store']);
+    Route::get('/budgets', [BudgetController::class, 'index']);
+    Route::put('/budgets/{id}', [BudgetController::class, 'update']);
+    Route::delete('/budgets/{id}', [BudgetController::class, 'destroy']);
+    
+});
+
+
+
 
  
 
