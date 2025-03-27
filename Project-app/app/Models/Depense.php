@@ -12,7 +12,9 @@ class Depense extends Model
 
     protected $fillable = [
         'name',
-        'number',
+        'amount',
+        'date',
+        'category_id',
         'user_id',
     ];
 
@@ -42,6 +44,19 @@ class Depense extends Model
     {
         return $this->belongsToMany(Tage::class);
     }
+
+    public function categories()
+    {
+        return $this->belongsToMany(Category::class);
+    }
+
+    public function budgets()
+    {
+        return $this->belongsToMany(Budget::class);
+    }
+
+    
+    
 
 
 }

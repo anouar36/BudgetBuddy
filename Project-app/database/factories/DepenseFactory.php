@@ -18,7 +18,9 @@ class DepenseFactory extends Factory
     {
         return [
             'name' => $this->faker->name(),
-            'number' => $this->faker->randomNumber(5, true), 
+            'amount' => $this->faker->numberBetween(100, 1000),
+            'category_id' => $this->faker->numberBetween(1, 10), 
+            'date' => $this->faker->date(),
             'user_id' => $this->faker->numberBetween(1, 10),
 
         ];

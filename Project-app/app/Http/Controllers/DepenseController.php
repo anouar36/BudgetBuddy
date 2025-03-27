@@ -96,6 +96,47 @@ class DepenseController extends Controller
     }
 
 
-   
+    public function detectAnomalies(Request $request)
+    {
+        $userId = $request->user()->id;
+        if (!$userId) {
+            return response()->json(['message' => 'Unauthorized'], 401);
+        }
+        $currentMonth = now()->format('Y-m');
+        $previousMonth = now()->subMonth()->format('Y-m');
 
+        $currentMonthExpenses = Depense::where('user_id', $userId)
+            ->where('date', 'like', "$currentMonth%")
+            ->get();
+
+        $previousMonthExpenses = Depense::where('user_id', $userId)
+            ->where('date', 'like', "$previousMonth%")
+            ->get();
+
+        $currentMonthTotal = $currentMonthExpenses->sum('amount');
+        $previousMonthTotal = $previousMonthExpenses->sum('amount');
+
+        if ($previousMonthTotal > 0 && $currentMonthTotal > ($previousMonthTotal * 1.2)) {
+            return response()->json([
+                'message' => 'تم اكتشاف زيادة مفاجئة في النفقات!',
+                'current_month_total' => $currentMonthTotal,
+                'previous_month_total' => $previousMonthTotal,
+            ], 200);
+        }
+        
+        foreach ($currentMonthExpenses as $expense) {
+            if ($expense->amount > 1000) {
+                return response()->json([
+                    'message' => ' تم اكتشاف معاملة غير معتادة!',
+                    'amount' => $expense->amount,
+                    'date' => $expense->date,
+                ], 200);
+            }
+        }
+
+        return response()->json(['message' => 'لا توجد أي أنشطة مشبوهة'], 200);
+    }
+
+
+    
 }

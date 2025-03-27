@@ -15,10 +15,9 @@ class CreateBudgetsTable extends Migration
     {
         Schema::create('budgets', function (Blueprint $table) {
             $table->id();
-            $table->string('category');
+            $table->foreignId('category_id')->references('id')->on('categories')->onDelete('cascade');
             $table->decimal('amount', 8, 2);
-            $table->foreignId('user_id')->constrained();
-            $table->foreignId('group_id')->constrained();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }
